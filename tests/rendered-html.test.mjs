@@ -53,7 +53,7 @@ test("renders every primary documentation route", async () => {
 
 test("documents the exact first preview train and package ownership", async () => {
   const releaseHtml = await (await render("/releases")).text();
-  assert.match(releaseHtml, /0\.1\.0-preview\.13\.1/);
+  assert.match(releaseHtml, /0\.1\.0-preview\.19\.1/);
   assert.match(releaseHtml, /After Runic Toolkit/);
   assert.match(releaseHtml, /documentation gate/i);
 
