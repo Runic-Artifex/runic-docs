@@ -17,7 +17,15 @@ test('translation schemas have canonical owned identifiers', async () => {
     const source = await readFile(path.join(schemaRoot, name), 'utf8');
     const schema = JSON.parse(source);
     assert.equal(schema.$id, canonicalRoot + name, name);
-    assert.equal(schema.$schema, 'https://json-schema.org/draft/2020-12/schema', name);
-    assert.equal(await readFile(path.join(publishedRoot, name), 'utf8'), source, name);
+    assert.equal(
+      schema.$schema,
+      'https://json-schema.org/draft/2020-12/schema',
+      name,
+    );
+    assert.equal(
+      await readFile(path.join(publishedRoot, name), 'utf8'),
+      source,
+      name,
+    );
   }
 });
