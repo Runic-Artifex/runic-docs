@@ -8,35 +8,67 @@
   <title>Application Bridge · Runic Artifex</title>
   <meta
     name="description"
-    content="The official Effect Schema-first boundary between Runic Toolkit frontends and NativeAOT-safe .NET application handlers."
+    content="Connect browser frontends to NativeAOT-safe .NET hosts with explicit commands, validated events, and generated contracts."
+  />
+  <meta property="og:title" content="Application Bridge · Runic Artifex" />
+  <meta
+    property="og:description"
+    content="Connect browser frontends to NativeAOT-safe .NET hosts with explicit commands, validated events, and generated contracts."
+  />
+  <meta name="twitter:title" content="Application Bridge · Runic Artifex" />
+  <meta
+    name="twitter:description"
+    content="Connect browser frontends to NativeAOT-safe .NET hosts with explicit commands, validated events, and generated contracts."
   />
 </svelte:head>
 
 <div>
   <section class="page-hero shell">
     <p class="eyebrow">Runic Toolkit</p>
-    <h1>Named application concepts cross one validated boundary.</h1>
+    <h1>
+      Connect a frontend to .NET through one validated application contract.
+    </h1>
     <p class="lede">
-      The Application Bridge is the official frontend boundary for Runic
-      Toolkit. It replaces generic ViewModel projection with explicit commands,
-      receipts, snapshots, events, and public errors.
+      Application Bridge carries named commands, receipts, snapshots, events,
+      and public errors between a frontend and a NativeAOT-safe .NET host. It
+      avoids exposing ViewModels or generic property operations as the public
+      contract.
     </p>
     <div class="actions">
       <ActionLink
         href="https://github.com/Runic-Artifex/runic-toolkit-examples/tree/main/samples/04-SvelteKitSetupApplication"
-        >Study the SvelteKit vertical</ActionLink
+        >View the SvelteKit example</ActionLink
       >
       <ActionLink
         variant="outline"
         href="https://github.com/Runic-Artifex/runic-toolkit/blob/main/docs/guides/application-bridge.md"
-        >Repository guide</ActionLink
+        >Read the repository guide</ActionLink
       >
     </div>
   </section>
   <section class="content-grid shell">
     <ContentCard
-      eyebrow="Contract pipeline"
-      title="Effect Schema is the authority"
+      eyebrow="What crosses the boundary"
+      title="Describe the application, not its implementation"
+      full
+    >
+      <div class="package-list">
+        <code>InitializeApplication</code><code>SelectDestination</code><code
+          >Navigate</code
+        ><code>StartInstallation</code><code>OperationProgress</code><code
+          >OperationCompleted</code
+        ><code>OperationFailed</code><code>CancelOperation</code>
+      </div>
+      <p>
+        There is no generic <code>setProperty</code>, numeric member identifier,
+        or ViewModel <code>execute</code> operation. Long-running work returns an
+        operation ID promptly; progress and terminal outcomes arrive through the validated
+        Effect Stream.
+      </p>
+    </ContentCard>
+    <ContentCard
+      eyebrow="Contracts become code"
+      title="Effect Schema is the source of truth"
       full
     >
       <div class="mini-flow">
@@ -55,14 +87,14 @@
         infers the public contract from ViewModels or CLR reflection.
       </p>
     </ContentCard>
-    <ContentCard eyebrow="Frontend runtime" title="One Effect owner">
+    <ContentCard eyebrow="Frontend runtime" title="One runtime owns the bridge">
       <p>
         One <code>ManagedRuntime</code> owns the Application Bridge service, transport,
         scope, and event stream. UI components call a controller instead of scattering
         Effect execution through the render tree.
       </p>
     </ContentCard>
-    <ContentCard eyebrow="Layers" title="Same application interface">
+    <ContentCard eyebrow="Layers" title="Change transports, not semantics">
       <p>
         <code>CsWebUiApplicationBridgeLive</code>,
         <code>MockApplicationBridge</code>, and fault-injection Layers expose
@@ -70,7 +102,10 @@
         transport.
       </p>
     </ContentCard>
-    <ContentCard eyebrow="Host runtime" title="NativeAOT by construction">
+    <ContentCard
+      eyebrow="Host runtime"
+      title="Stay NativeAOT-safe by construction"
+    >
       <p>
         Generated DTOs, strict codecs, exhaustive dispatch, and typed event
         publishers avoid reflection. Sessions own bounded admission, revisions,
@@ -78,7 +113,10 @@
         teardown.
       </p>
     </ContentCard>
-    <ContentCard eyebrow="Security" title="Privileged choices remain native">
+    <ContentCard
+      eyebrow="Security"
+      title="Keep privileged choices in the native host"
+    >
       <p>
         The frontend can request destination selection but cannot send a
         privileged path. The host returns an opaque selection ID plus
@@ -87,9 +125,13 @@
     </ContentCard>
     <ContentCard
       eyebrow="Official frontend path"
-      title="Svelte 5, SvelteKit, Vite 8, and Vite DevTools"
+      title="Use the official Svelte and Vite path"
       full
     >
+      <p>
+        The official frontend packages cover Svelte state, SvelteKit
+        configuration, and Vite development tooling.
+      </p>
       <p>
         <code>@runic-artifex/svelte</code> projects one Application Bridge
         controller into Svelte 5 runes and context.
@@ -107,38 +149,38 @@
       </p>
     </ContentCard>
     <ContentCard
-      eyebrow="Wire vocabulary"
-      title="Describe the application, not its implementation"
+      eyebrow="Availability"
+      title="Wait for registry publication"
       full
     >
-      <div class="package-list">
-        <code>InitializeApplication</code><code>SelectDestination</code><code
-          >Navigate</code
-        ><code>StartInstallation</code><code>OperationProgress</code><code
-          >OperationCompleted</code
-        ><code>OperationFailed</code><code>CancelOperation</code>
-      </div>
-      <p>
-        There is no generic <code>setProperty</code>, numeric member identifier,
-        or ViewModel
-        <code>execute</code> operation. Long-running work returns an operation ID
-        promptly; progress and terminal outcomes arrive through the validated Effect
-        Stream.
-      </p>
-    </ContentCard>
-    <ContentCard eyebrow="Install" title="Wait for registry publication" full>
       <Notice title="Publication pending">
         <p>
-          Exact Toolkit, Svelte, and Vite candidates have passed their
-          public-source verification workflows. Install commands will return
-          here after the matching NuGet and npm artifacts complete
-          trusted-publisher activation and final registry acceptance.
+          These exact candidates have passed their public-source verification
+          workflows:
+        </p>
+        <ul>
+          <li>
+            Runic Toolkit <code>0.1.0-preview.22.1</code> — Verified candidate · not
+            yet published
+          </li>
+          <li>
+            Runic Svelte <code>0.1.0-preview.8.1</code> — Verified candidate · not
+            yet published
+          </li>
+          <li>
+            Runic Vite <code>0.1.0-preview.8.1</code> — Verified candidate · not yet
+            published
+          </li>
+        </ul>
+        <p>
+          Install commands will appear after the matching NuGet and npm
+          artifacts are published and accepted.
         </p>
       </Notice>
     </ContentCard>
     <ContentCard
-      eyebrow="Reference proof"
-      title="The package-only Setup applications close the loop"
+      eyebrow="Reference applications"
+      title="See the neutral and SvelteKit paths end to end"
       full
     >
       <p>

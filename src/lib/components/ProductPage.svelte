@@ -11,11 +11,24 @@
   let { product }: { product: Product } = $props();
   let isApplication = $derived(product.kind === 'application');
   let isPublished = $derived((product.install?.length ?? 0) > 0);
+  let hasNpmPackages = $derived((product.npmPackages?.length ?? 0) > 0);
+  let candidateRegistry = $derived(
+    hasNpmPackages && product.packages.length > 0
+      ? 'public registries'
+      : hasNpmPackages
+        ? 'npm'
+        : 'NuGet',
+  );
+  let pageTitle = $derived(`${product.name} · Runic Artifex`);
 </script>
 
 <svelte:head>
-  <title>{product.name} · Runic Artifex</title>
+  <title>{pageTitle}</title>
   <meta name="description" content={product.summary} />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={product.summary} />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={product.summary} />
 </svelte:head>
 
 <div>
@@ -47,22 +60,41 @@
     </div>
     <p class="lede">{product.description}</p>
     <div class="actions">
-      <ActionLink href={`https://github.com/Runic-Artifex/${product.slug}`}
-        >View source</ActionLink
-      >
-      {#if product.slug === 'runic-toolkit'}
-        <ActionLink href={resolve('/application-bridge')} variant="outline"
-          >Application Bridge guide</ActionLink
+      {#if isPublished}
+        <ActionLink
+          href={resolve('/products/[slug]#availability', {
+            slug: product.slug,
+          })}>Install {product.shortName}</ActionLink
+        >
+      {:else}
+        <ActionLink href={product.source}>View source</ActionLink>
+      {/if}
+      {#if !isPublished && !isApplication}
+        <ActionLink
+          href={resolve('/products/[slug]#availability', {
+            slug: product.slug,
+          })}
+          variant="outline">Release status</ActionLink
         >
       {/if}
-      {#if product.related}
+      {#if isPublished}
+        <ActionLink href={product.source} variant="outline"
+          >View source</ActionLink
+        >
+      {/if}
+      {#if isApplication && product.related}
         <ActionLink href={resolve(product.related.href)} variant="outline"
           >{product.related.label}</ActionLink
         >
       {/if}
-      {#if !isApplication}
-        <ActionLink href={resolve('/packages')} variant="outline"
-          >Package catalog</ActionLink
+      {#if product.slug === 'runic-toolkit'}
+        <ActionLink href={resolve('/application-bridge')} variant="outline"
+          >Explore Application Bridge</ActionLink
+        >
+      {/if}
+      {#if product.related && !isApplication}
+        <ActionLink href={resolve(product.related.href)} variant="outline"
+          >{product.related.label}</ActionLink
         >
       {/if}
     </div>
@@ -76,13 +108,15 @@
         >When to choose it</a
       >
       <a href={resolve('/products/[slug]#boundaries', { slug: product.slug })}
-        >Boundaries</a
+        >Scope and boundaries</a
       >
-      <a href={resolve('/products/[slug]#install', { slug: product.slug })}
-        >{isApplication ? 'Release' : 'Install'}</a
+      <a
+        href={resolve('/products/[slug]#availability', {
+          slug: product.slug,
+        })}>Availability</a
       >
       <a href={resolve('/products/[slug]#packages', { slug: product.slug })}
-        >{isApplication ? 'Artifacts' : 'Packages'}</a
+        >{isApplication ? 'Downloads' : 'Packages'}</a
       >
     </aside>
     <article class="doc-content">
@@ -94,28 +128,34 @@
         </ul>
       </section>
       <section id="boundaries">
-        <p class="eyebrow">Architecture</p>
-        <h2>What stays outside</h2>
+        <p class="eyebrow">Scope</p>
+        <h2>Scope and boundaries</h2>
         <ul>
           {#each product.boundaries as item (item)}<li>{item}</li>{/each}
         </ul>
       </section>
-      <section id="install">
-        <p class="eyebrow">Preview</p>
-        <h2>{isApplication ? 'Download a release' : 'Prepare to install'}</h2>
+      <section id="availability">
+        <p class="eyebrow">Availability</p>
+        <h2>
+          {isApplication
+            ? 'Desktop downloads'
+            : isPublished
+              ? `Install ${product.shortName}`
+              : 'Release status'}
+        </h2>
         <Notice
           title={isApplication
-            ? 'First release pending'
+            ? 'First preview pending'
             : isPublished
-              ? 'Available on the public registry'
-              : 'Publication pending'}
+              ? 'Available on NuGet'
+              : 'Verified candidate · not yet published'}
         >
           <p>
             {isApplication
-              ? 'The editor packaging pipeline produces self-contained desktop archives. Signed public downloads will appear in the editor repository without coupling its release cadence to the translation package family.'
+              ? 'The first desktop preview is pending. Downloads will appear in GitHub Releases for the editor repository.'
               : isPublished
-                ? 'This version is available from its public registry. Keep exact preview versions in reproducible applications.'
-                : 'Exact candidate artifacts have passed their public-source verification workflows. Install commands will be added only after the matching registry artifacts are published and accepted.'}
+                ? `Version ${product.version} is available on NuGet. Pin the exact preview version in reproducible applications.`
+                : `Candidate ${product.version} has passed its public-source verification workflow but is not yet available from ${candidateRegistry}.`}
           </p>
         </Notice>
         {#each product.install ?? [] as command (command)}<pre><code
@@ -123,8 +163,8 @@
             ></pre>{/each}
       </section>
       <section id="packages">
-        <p class="eyebrow">Owned surface</p>
-        <h2>{isApplication ? 'Release artifacts' : 'Package family'}</h2>
+        <p class="eyebrow">What you get</p>
+        <h2>{isApplication ? 'Downloads' : 'Packages'}</h2>
         <div class="package-list">
           {#each product.packages as name (name)}<code>{name}</code>{/each}
           {#each product.npmPackages ?? [] as name (name)}<code>{name}</code
@@ -133,16 +173,23 @@
             >{/each}
         </div>
         <p>
-          {isApplication ? 'Release status' : 'Public candidate status'}:
+          {isApplication
+            ? 'Release status'
+            : isPublished
+              ? 'Registry version'
+              : 'Candidate status'}:
           <code>{product.version}</code>
+          {#if !isApplication && !isPublished}
+            <span> · Verified candidate · not yet published</span>
+          {/if}
         </p>
       </section>
       <Card.Root class="next-card" size="sm">
         <Card.Header>
-          <Card.Description>Next</Card.Description>
+          <Card.Description>Next steps</Card.Description>
           <Card.Title class="font-serif text-xl">
             <a href={resolve('/architecture')}
-              >See how product integrations preserve dependency direction →</a
+              >Learn how Runic products connect without coupling their cores →</a
             >
           </Card.Title>
         </Card.Header>

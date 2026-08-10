@@ -55,8 +55,34 @@ test('initializes validated docs appearance before SvelteKit head rendering', as
   assert.match(initializer, /runic-docs\.theme-palette/);
   assert.match(initializer, /prefers-color-scheme: dark/);
   assert.match(initializer, /style\.colorScheme = dark \? 'dark' : 'light'/);
+  assert.match(
+    initializer,
+    /document\.documentElement\.classList\.add\('js'\)/,
+  );
   assert.doesNotMatch(html, /runic-translations\.theme-/);
   assert.doesNotMatch(html, /webui\.js|translations-editor/i);
+});
+
+test('reveals the hydrated Sheet trigger only after JavaScript is detected', async () => {
+  const html = await readFile(
+    new URL('../src/app.html', import.meta.url),
+    'utf8',
+  );
+  const css = await readFile(
+    new URL('../src/app.css', import.meta.url),
+    'utf8',
+  );
+
+  assert.match(html, /document\.documentElement\.classList\.add\('js'\)/);
+  assert.match(css, /\.mobile-menu-button\s*\{[\s\S]*?display:\s*none/);
+  assert.match(
+    css,
+    /@media\s*\(max-width:\s*\d+px\)[\s\S]*?\.js \.mobile-menu-button\s*\{[^}]*display:\s*inline-flex/,
+  );
+  assert.doesNotMatch(
+    css,
+    /(?<!\.js )\.mobile-menu-button\s*\{[^}]*display:\s*inline-flex/,
+  );
 });
 
 function parseInitializerArray(initializer, name) {

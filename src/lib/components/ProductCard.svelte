@@ -3,7 +3,15 @@
   import * as Card from '$lib/components/ui/card';
   import type { Product } from '$lib/docs-data';
 
-  let { product, label }: { product: Product; label: string } = $props();
+  let {
+    product,
+    label,
+    headingLevel = 3,
+  }: {
+    product: Product;
+    label: string;
+    headingLevel?: 2 | 3;
+  } = $props();
 </script>
 
 <a
@@ -19,7 +27,11 @@
       ></span>
       <p class="kicker">{product.kicker}</p>
       <Card.Title>
-        <h3 class="font-serif text-2xl">{product.name}</h3>
+        {#if headingLevel === 2}
+          <h2 class="font-serif text-2xl">{product.name}</h2>
+        {:else}
+          <h3 class="font-serif text-2xl">{product.name}</h3>
+        {/if}
       </Card.Title>
       <Card.Description class="text-sm leading-relaxed">
         {product.summary}

@@ -799,7 +799,7 @@ pre {
     display: none;
   }
 
-  .mobile-menu-button {
+  .js .mobile-menu-button {
     display: inline-flex;
   }
 

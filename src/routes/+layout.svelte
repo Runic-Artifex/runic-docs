@@ -25,8 +25,6 @@
   let themeMode = $state<ThemeMode>('dark');
   let themePalette = $state<ThemePalette>('runic');
 
-  const description =
-    'Documentation for the independent Runic Artifex products and their explicit integration boundaries.';
   const navigation = [
     { href: '/getting-started', label: 'Start' },
     { href: '/products', label: 'Products' },
@@ -70,15 +68,11 @@
   <meta property="og:type" content="website" />
   <meta property="og:url" content={`${page.url.origin}${page.url.pathname}`} />
   <meta property="og:site_name" content="Runic Artifex Documentation" />
-  <meta property="og:title" content="Runic Artifex Documentation" />
-  <meta property="og:description" content={description} />
   <meta property="og:image" content={`${page.url.origin}/og.png`} />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:image:alt" content="Runic Artifex documentation" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Runic Artifex Documentation" />
-  <meta name="twitter:description" content={description} />
   <meta name="twitter:image" content={`${page.url.origin}/og.png`} />
 </svelte:head>
 
@@ -229,7 +223,7 @@
       <div>
         <strong>Project</strong><a href="https://github.com/Runic-Artifex"
           >GitHub organization</a
-        ><a href={resolve('/releases')}>Release policy</a><a
+        ><a href={resolve('/releases')}>Release status</a><a
           href="https://github.com/Runic-Artifex/.github/blob/main/SECURITY.md"
           >Security</a
         >
