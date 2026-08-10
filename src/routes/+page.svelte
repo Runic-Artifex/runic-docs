@@ -1,5 +1,10 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import ActionLink from '$lib/components/ActionLink.svelte';
+  import ProductCard from '$lib/components/ProductCard.svelte';
+  import { Badge } from '$lib/components/ui/badge';
+  import * as Card from '$lib/components/ui/card';
+  import { Separator } from '$lib/components/ui/separator';
   import { products } from '$lib/docs-data';
 </script>
 
@@ -12,7 +17,7 @@
   />
 </svelte:head>
 
-<main>
+<div>
   <section class="hero shell">
     <div class="hero-copy">
       <p class="eyebrow">Runic Artifex ecosystem</p>
@@ -23,15 +28,15 @@
         compose without sharing one release train.
       </p>
       <div class="actions">
-        <a class="button primary" href={resolve('/getting-started')}
-          >Start with the preview</a
+        <ActionLink href={resolve('/getting-started')}
+          >Start with the preview</ActionLink
         >
-        <a class="button secondary" href={resolve('/architecture')}
-          >Understand the boundaries</a
+        <ActionLink href={resolve('/architecture')} variant="outline"
+          >Understand the boundaries</ActionLink
         >
       </div>
     </div>
-    <div
+    <Card.Root
       class="hero-map"
       aria-label="Runic Artifex product relationship summary"
     >
@@ -44,7 +49,7 @@
         ><span>Editor</span><span>CLI</span><span>CsWebUi</span>
       </div>
       <p>Products own their cores and official integrations.</p>
-    </div>
+    </Card.Root>
   </section>
 
   <section class="section shell">
@@ -58,26 +63,13 @@
     </div>
     <div class="product-grid">
       {#each products as product (product.slug)}
-        <a
-          class="product-card"
-          href={resolve('/products/[slug]', { slug: product.slug })}
-        >
-          <span
-            class="product-mark product-logo"
-            style:background-image={`url(${product.icon})`}
-            aria-hidden="true"
-          ></span>
-          <p class="kicker">{product.kicker}</p>
-          <h3>{product.name}</h3>
-          <p>{product.summary}</p>
-          <span class="card-link">Explore {product.shortName} →</span>
-        </a>
+        <ProductCard {product} label={`Explore ${product.shortName}`} />
       {/each}
     </div>
   </section>
 
   <section class="section shell">
-    <div class="principle-panel">
+    <Card.Root class="principle-panel">
       <div>
         <p class="eyebrow">The ownership rule</p>
         <h2>Integrations belong to the product doing the integrating.</h2>
@@ -95,12 +87,15 @@
         versioning, and release decisions stay with the product that owns the
         behavior.
       </p>
-    </div>
+    </Card.Root>
   </section>
 
+  <Separator class="shell" />
   <section class="section shell launch-strip">
     <div>
-      <p class="eyebrow">First public preview</p>
+      <Badge variant="outline" class="mb-4 border-primary/30 text-primary"
+        >First public preview</Badge
+      >
       <h2>The source is public; the first package previews are next.</h2>
       <p>
         Current main branches and exact candidate artifacts are green. Public
@@ -108,8 +103,8 @@
         registry acceptance checks.
       </p>
     </div>
-    <a class="button secondary" href={resolve('/releases')}
-      >See current release status</a
+    <ActionLink href={resolve('/releases')} variant="outline"
+      >See current release status</ActionLink
     >
   </section>
-</main>
+</div>

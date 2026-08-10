@@ -1,4 +1,8 @@
 <script lang="ts">
+  import { Badge } from '$lib/components/ui/badge';
+  import * as Item from '$lib/components/ui/item';
+  import * as Table from '$lib/components/ui/table';
+
   const train = [
     ['CsWebUi', '2.5.0-beta.4.4', 'Available on nuget.org'],
     [
@@ -52,7 +56,7 @@
   />
 </svelte:head>
 
-<main>
+<div>
   <section class="page-hero shell">
     <p class="eyebrow">Release policy</p>
     <h1>Verify once. Publish the same artifacts.</h1>
@@ -64,61 +68,81 @@
   </section>
   <section class="content-grid shell">
     <div class="release-steps">
-      <article class="release-step">
-        <div>
-          <h3>Freeze exact source commits</h3>
-          <p>
+      <Item.Root class="release-step" variant="outline">
+        <Item.Content>
+          <Item.Title class="line-clamp-none">
+            <h2 class="font-serif text-xl">Freeze exact source commits</h2>
+          </Item.Title>
+          <Item.Description class="line-clamp-none">
             Finish product changes and select immutable release inputs from
             green main branches.
-          </p>
-          <span class="status-pill">Complete</span>
-        </div>
-      </article>
-      <article class="release-step">
-        <div>
-          <h3>Build fresh candidates</h3>
-          <p>
+          </Item.Description>
+        </Item.Content>
+        <Item.Actions><Badge>Complete</Badge></Item.Actions>
+      </Item.Root>
+      <Item.Root class="release-step" variant="outline">
+        <Item.Content>
+          <Item.Title class="line-clamp-none">
+            <h2 class="font-serif text-xl">Build fresh candidates</h2>
+          </Item.Title>
+          <Item.Description class="line-clamp-none">
             Restore, test, pack, and run frontend, downstream-consumer, and
             applicable NativeAOT gates without sibling source dependencies.
-          </p>
-          <span class="status-pill">Complete</span>
-        </div>
-      </article>
-      <article class="release-step">
-        <div>
-          <h3>Cross the documentation gate</h3>
-          <p>
+          </Item.Description>
+        </Item.Content>
+        <Item.Actions><Badge>Complete</Badge></Item.Actions>
+      </Item.Root>
+      <Item.Root class="release-step" variant="outline">
+        <Item.Content>
+          <Item.Title class="line-clamp-none">
+            <h2 class="font-serif text-xl">Cross the documentation gate</h2>
+          </Item.Title>
+          <Item.Description class="line-clamp-none">
             Review the portal against those exact artifacts and remove stale
             product or version claims.
-          </p>
-          <span class="status-pill">In progress</span>
-        </div>
-      </article>
-      <article class="release-step">
-        <div>
-          <h3>Enable trusted publishing</h3>
-          <p>
+          </Item.Description>
+        </Item.Content>
+        <Item.Actions><Badge variant="outline">In progress</Badge></Item.Actions
+        >
+      </Item.Root>
+      <Item.Root class="release-step" variant="outline">
+        <Item.Content>
+          <Item.Title class="line-clamp-none">
+            <h2 class="font-serif text-xl">Enable trusted publishing</h2>
+          </Item.Title>
+          <Item.Description class="line-clamp-none">
             Use protected environments and OIDC for NuGet and npm. Use a
             short-lived bootstrap token only where npm requires a first package
             record.
-          </p>
-          <span class="status-pill">Launch setup</span>
-        </div>
-      </article>
+          </Item.Description>
+        </Item.Content>
+        <Item.Actions
+          ><Badge variant="outline">Launch setup</Badge></Item.Actions
+        >
+      </Item.Root>
     </div>
     <div class="package-table">
-      <table>
-        <thead
-          ><tr
-            ><th>Product</th><th>Public status</th><th>Order constraint</th></tr
-          ></thead
-        >
-        <tbody>
+      <Table.Root>
+        <Table.Caption class="sr-only">
+          Runic Artifex release candidates and publication order
+        </Table.Caption>
+        <Table.Header>
+          <Table.Row>
+            <Table.Head scope="col">Product</Table.Head>
+            <Table.Head scope="col">Public status</Table.Head>
+            <Table.Head scope="col">Order constraint</Table.Head>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
           {#each train as [name, status, constraint] (name)}
-            <tr><td>{name}</td><td>{status}</td><td>{constraint}</td></tr>
+            <Table.Row>
+              <Table.Cell>{name}</Table.Cell>
+              <Table.Cell>{status}</Table.Cell>
+              <Table.Cell>{constraint}</Table.Cell>
+            </Table.Row>
           {/each}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table.Root>
     </div>
   </section>
-</main>
+</div>

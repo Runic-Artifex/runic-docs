@@ -14,6 +14,11 @@ function render(path = '/') {
 
 test('renders the documentation home with complete metadata and branding', async () => {
   const html = await render();
+  assert.match(
+    html,
+    /^<!doctype html>\s*<html lang="en" class="dark" data-theme="runic">/,
+  );
+  assert.match(html, /name="color-scheme" content="dark light"/);
   assert.match(html, /Build one application model across \.NET surfaces/);
   assert.match(
     html,
@@ -31,6 +36,17 @@ test('renders the documentation home with complete metadata and branding', async
   assert.match(html, /href="\.\/getting-started"/);
   assert.match(html, /name="twitter:card" content="summary_large_image"/);
   assert.match(html, /rel="icon" href="\/icon\.png"/);
+  assert.match(html, /runic-docs\.theme-mode/);
+  assert.match(html, /runic-docs\.theme-palette/);
+  assert.doesNotMatch(html, /runic-translations\.theme-/);
+  assert.match(html, /aria-label="Appearance, Runic Gold · Dark"/);
+  assert.match(html, /data-appearance-trigger="compact"/);
+  assert.match(
+    html,
+    /<a class="skip-link" href="#content">Skip to content<\/a>/,
+  );
+  assert.match(html, /<main id="content" tabindex="-1">/);
+  assert.equal(html.match(/<main\b/g)?.length, 1);
   assert.match(
     html,
     /background-image:\s*url\(\/products\/runic-toolkit\.png\)/,
@@ -41,6 +57,37 @@ test('renders the documentation home with complete metadata and branding', async
     html,
     /codex-preview|SkeletonPreview|Your site is taking shape/,
   );
+});
+
+test('keeps navigation usable before hydration and exposes the Sheet trigger contract', async () => {
+  const homeHtml = await render();
+  const productsHtml = await render('/products');
+  const fallback = homeHtml.match(/<noscript>([\s\S]*?)<\/noscript>/)?.[1];
+
+  assert.ok(fallback, 'expected a no-JavaScript navigation fallback');
+  assert.match(fallback, /<details class="noscript-nav">/);
+  assert.match(fallback, /Mobile navigation without JavaScript/);
+  for (const [href, label] of [
+    ['./getting-started', 'Start'],
+    ['./products', 'Products'],
+    ['./application-bridge', 'Application Bridge'],
+    ['./architecture', 'Architecture'],
+    ['./packages', 'Packages'],
+    ['./releases', 'Releases'],
+  ]) {
+    assert.match(fallback, new RegExp(`href="${href}">${label}<\\/a>`));
+  }
+
+  assert.match(
+    productsHtml,
+    /<noscript>[\s\S]*?href="\.\.\/products" aria-current="page">Products<\/a>[\s\S]*?<\/noscript>/,
+  );
+  assert.match(homeHtml, /aria-haspopup="dialog"/);
+  assert.match(homeHtml, /aria-expanded="false"/);
+  assert.match(homeHtml, /data-dialog-trigger=""/);
+  assert.match(homeHtml, /data-state="closed"/);
+  assert.match(homeHtml, /aria-label="Open documentation navigation"/);
+  assert.doesNotMatch(homeHtml, /data-slot="sheet-content"/);
 });
 
 test('renders every primary documentation route', async () => {
@@ -98,6 +145,53 @@ test('documents the headless Flow surface and package ownership', async () => {
   assert.match(packageHtml, /@runic-artifex\/vite-plugin-runic-translations/);
 });
 
+test('renders package and release tables with captions, scoped heads, and overflow containment', async () => {
+  const packageHtml = await render('/packages');
+  const releaseHtml = await render('/releases');
+
+  for (const html of [packageHtml, releaseHtml]) {
+    assert.match(
+      html,
+      /data-slot="table-container" class="relative w-full overflow-x-auto"/,
+    );
+    assert.match(html, /data-slot="table-caption"/);
+    assert.match(html, /<th[^>]*scope="col">/);
+  }
+  assert.match(
+    packageHtml,
+    /Runic Artifex public package ownership and publication status/,
+  );
+  assert.match(
+    releaseHtml,
+    /Runic Artifex release candidates and publication order/,
+  );
+  assert.equal(packageHtml.match(/scope="col"/g)?.length, 4);
+  assert.equal(releaseHtml.match(/scope="col"/g)?.length, 3);
+});
+
+test('uses semantic untruncated release steps', async () => {
+  const html = await render('/releases');
+
+  for (const title of [
+    'Freeze exact source commits',
+    'Build fresh candidates',
+    'Cross the documentation gate',
+    'Enable trusted publishing',
+  ]) {
+    assert.match(
+      html,
+      new RegExp(`<h2 class="font-serif text-xl">${title}<\\/h2>`),
+    );
+  }
+  assert.equal(html.match(/data-slot="item-description"/g)?.length, 4);
+  assert.equal(html.match(/line-clamp-none/g)?.length, 8);
+  assert.doesNotMatch(html, /data-slot="item-description"[^>]*line-clamp-2/);
+  assert.match(
+    html,
+    /Restore, test, pack, and run frontend, downstream-consumer, and\s+applicable NativeAOT gates without sibling source dependencies\./,
+  );
+});
+
 test('uses the canonical Runic Translations identifiers', async () => {
   const html = await render('/products/runic-translations');
   assert.match(html, /<h1>Runic Translations<\/h1>/);
@@ -109,6 +203,8 @@ test('uses the canonical Runic Translations identifiers', async () => {
 test('reports release readiness conservatively', async () => {
   const homeHtml = await render('/');
   const releaseHtml = await render('/releases');
+  const gettingStartedHtml = await render('/getting-started');
+  const bridgeHtml = await render('/application-bridge');
   assert.match(homeHtml, /The source is public/i);
   assert.match(homeHtml, /registry publication remains gated/i);
   assert.match(releaseHtml, /0\.1\.0-preview\.22\.1 · verified, unpublished/);
@@ -118,4 +214,17 @@ test('reports release readiness conservatively', async () => {
     releaseHtml,
     /<span class="status-pill">Published<\/span>/,
   );
+  assert.match(
+    gettingStartedHtml,
+    /Exact candidates for the other package\s+families have passed their public-source verification workflows/,
+  );
+  assert.match(
+    bridgeHtml,
+    /Exact Toolkit, Svelte, and Vite candidates have passed their\s+public-source verification workflows/,
+  );
+  for (const html of [gettingStartedHtml, bridgeHtml]) {
+    assert.doesNotMatch(html, /refreshing candidates/i);
+    assert.doesNotMatch(html, /being rebuilt/i);
+    assert.doesNotMatch(html, /refreshed public candidates/i);
+  }
 });

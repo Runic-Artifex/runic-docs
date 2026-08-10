@@ -1,3 +1,9 @@
+<script lang="ts">
+  import ActionLink from '$lib/components/ActionLink.svelte';
+  import ContentCard from '$lib/components/ContentCard.svelte';
+  import Notice from '$lib/components/Notice.svelte';
+</script>
+
 <svelte:head>
   <title>Application Bridge · Runic Artifex</title>
   <meta
@@ -6,7 +12,7 @@
   />
 </svelte:head>
 
-<main>
+<div>
   <section class="page-hero shell">
     <p class="eyebrow">Runic Toolkit</p>
     <h1>Named application concepts cross one validated boundary.</h1>
@@ -16,22 +22,23 @@
       receipts, snapshots, events, and public errors.
     </p>
     <div class="actions">
-      <a
-        class="button primary"
+      <ActionLink
         href="https://github.com/Runic-Artifex/runic-toolkit-examples/tree/main/samples/04-SvelteKitSetupApplication"
-        >Study the SvelteKit vertical</a
+        >Study the SvelteKit vertical</ActionLink
       >
-      <a
-        class="button secondary"
+      <ActionLink
+        variant="outline"
         href="https://github.com/Runic-Artifex/runic-toolkit/blob/main/docs/guides/application-bridge.md"
-        >Repository guide</a
+        >Repository guide</ActionLink
       >
     </div>
   </section>
   <section class="content-grid shell">
-    <article class="info-card full">
-      <p class="eyebrow">Contract pipeline</p>
-      <h2>Effect Schema is the authority</h2>
+    <ContentCard
+      eyebrow="Contract pipeline"
+      title="Effect Schema is the authority"
+      full
+    >
       <div class="mini-flow">
         <span>Effect Schema<br /><small>encoded wire values</small></span><b
           >→</b
@@ -47,48 +54,42 @@
         compilation reads only committed artifacts; it never starts Node or
         infers the public contract from ViewModels or CLR reflection.
       </p>
-    </article>
-    <article class="info-card">
-      <p class="eyebrow">Frontend runtime</p>
-      <h2>One Effect owner</h2>
+    </ContentCard>
+    <ContentCard eyebrow="Frontend runtime" title="One Effect owner">
       <p>
         One <code>ManagedRuntime</code> owns the Application Bridge service, transport,
         scope, and event stream. UI components call a controller instead of scattering
         Effect execution through the render tree.
       </p>
-    </article>
-    <article class="info-card">
-      <p class="eyebrow">Layers</p>
-      <h2>Same application interface</h2>
+    </ContentCard>
+    <ContentCard eyebrow="Layers" title="Same application interface">
       <p>
         <code>CsWebUiApplicationBridgeLive</code>,
         <code>MockApplicationBridge</code>, and fault-injection Layers expose
         the same semantics. Renderer code remains independent of the active
         transport.
       </p>
-    </article>
-    <article class="info-card">
-      <p class="eyebrow">Host runtime</p>
-      <h2>NativeAOT by construction</h2>
+    </ContentCard>
+    <ContentCard eyebrow="Host runtime" title="NativeAOT by construction">
       <p>
         Generated DTOs, strict codecs, exhaustive dispatch, and typed event
         publishers avoid reflection. Sessions own bounded admission, revisions,
         sequence numbers, duplicate rejection, operations, and deterministic
         teardown.
       </p>
-    </article>
-    <article class="info-card">
-      <p class="eyebrow">Security</p>
-      <h2>Privileged choices remain native</h2>
+    </ContentCard>
+    <ContentCard eyebrow="Security" title="Privileged choices remain native">
       <p>
         The frontend can request destination selection but cannot send a
         privileged path. The host returns an opaque selection ID plus
         display-safe metadata and validates that handle when work begins.
       </p>
-    </article>
-    <article class="info-card full">
-      <p class="eyebrow">Official frontend path</p>
-      <h2>Svelte 5, SvelteKit, Vite 8, and Vite DevTools</h2>
+    </ContentCard>
+    <ContentCard
+      eyebrow="Official frontend path"
+      title="Svelte 5, SvelteKit, Vite 8, and Vite DevTools"
+      full
+    >
       <p>
         <code>@runic-artifex/svelte</code> projects one Application Bridge
         controller into Svelte 5 runes and context.
@@ -104,10 +105,12 @@
         These integrations intentionally support Svelte 5 only. Framework
         adapters do not duplicate transport, reconnect, or protocol state.
       </p>
-    </article>
-    <article class="info-card full">
-      <p class="eyebrow">Wire vocabulary</p>
-      <h2>Describe the application, not its implementation</h2>
+    </ContentCard>
+    <ContentCard
+      eyebrow="Wire vocabulary"
+      title="Describe the application, not its implementation"
+      full
+    >
       <div class="package-list">
         <code>InitializeApplication</code><code>SelectDestination</code><code
           >Navigate</code
@@ -122,23 +125,22 @@
         promptly; progress and terminal outcomes arrive through the validated Effect
         Stream.
       </p>
-    </article>
-    <article class="info-card full">
-      <p class="eyebrow">Install</p>
-      <h2>Wait for the refreshed public candidates</h2>
-      <div class="notice">
-        <strong>Publication pending</strong>
+    </ContentCard>
+    <ContentCard eyebrow="Install" title="Wait for registry publication" full>
+      <Notice title="Publication pending">
         <p>
-          Toolkit, Svelte, and Vite candidates are being rebuilt from their
-          final source commits. Exact install commands will return here after
-          the matching NuGet and npm artifacts pass clean downstream consumption
-          and trusted-publisher setup.
+          Exact Toolkit, Svelte, and Vite candidates have passed their
+          public-source verification workflows. Install commands will return
+          here after the matching NuGet and npm artifacts complete
+          trusted-publisher activation and final registry acceptance.
         </p>
-      </div>
-    </article>
-    <article class="info-card full">
-      <p class="eyebrow">Reference proof</p>
-      <h2>The package-only Setup applications close the loop</h2>
+      </Notice>
+    </ContentCard>
+    <ContentCard
+      eyebrow="Reference proof"
+      title="The package-only Setup applications close the loop"
+      full
+    >
       <p>
         The neutral and SvelteKit reference applications cover initialization,
         backend-authoritative navigation, opaque destination selection,
@@ -146,6 +148,6 @@
         recovery, development DevTools, deterministic production frontend
         output, NativeAOT, and real native-browser roundtrips.
       </p>
-    </article>
+    </ContentCard>
   </section>
-</main>
+</div>

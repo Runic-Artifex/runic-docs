@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { resolve } from '$app/paths';
+  import ProductCard from '$lib/components/ProductCard.svelte';
   import { products } from '$lib/docs-data';
 </script>
 
@@ -11,7 +11,7 @@
   />
 </svelte:head>
 
-<main>
+<div>
   <section class="page-hero shell">
     <p class="eyebrow">Product map</p>
     <h1>Independent products. Designed to compose.</h1>
@@ -22,24 +22,12 @@
   </section>
   <section class="shell product-grid section">
     {#each products as product (product.slug)}
-      <a
-        class="product-card"
-        href={resolve('/products/[slug]', { slug: product.slug })}
-      >
-        <span
-          class="product-mark product-logo"
-          style:background-image={`url(${product.icon})`}
-          aria-hidden="true"
-        ></span>
-        <p class="kicker">{product.kicker}</p>
-        <h3>{product.name}</h3>
-        <p>{product.summary}</p>
-        <span class="card-link"
-          >{product.kind === 'application'
-            ? 'Editor and boundaries'
-            : 'Packages and boundaries'} →</span
-        >
-      </a>
+      <ProductCard
+        {product}
+        label={product.kind === 'application'
+          ? 'Editor and boundaries'
+          : 'Packages and boundaries'}
+      />
     {/each}
   </section>
-</main>
+</div>

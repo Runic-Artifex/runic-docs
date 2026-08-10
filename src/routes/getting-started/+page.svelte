@@ -1,5 +1,7 @@
 <script lang="ts">
   import { resolve } from '$app/paths';
+  import ContentCard from '$lib/components/ContentCard.svelte';
+  import Notice from '$lib/components/Notice.svelte';
 </script>
 
 <svelte:head>
@@ -10,7 +12,7 @@
   />
 </svelte:head>
 
-<main>
+<div>
   <section class="page-hero shell">
     <p class="eyebrow">Getting started</p>
     <h1>Begin at the capability boundary.</h1>
@@ -21,9 +23,7 @@
     </p>
   </section>
   <section class="content-grid shell">
-    <article class="info-card">
-      <p class="eyebrow">01 · Choose</p>
-      <h2>Pick the owner</h2>
+    <ContentCard eyebrow="01 · Choose" title="Pick the owner">
       <ul>
         <li>
           Need a desktop browser host? Start with <a
@@ -56,30 +56,28 @@
           >.
         </li>
       </ul>
-    </article>
-    <article class="info-card">
-      <p class="eyebrow">02 · Inspect</p>
-      <h2>Use the candidate status, not an old version list</h2>
+    </ContentCard>
+    <ContentCard
+      eyebrow="02 · Inspect"
+      title="Use the candidate status, not an old version list"
+    >
       <p>
-        CsWebUi is already public. Other package families are refreshing
-        candidates from their final source commits. The catalog names package
-        ownership now and will show installable versions only after matching
-        public artifacts are ready.
+        CsWebUi is already public. Exact candidates for the other package
+        families have passed their public-source verification workflows. The
+        catalog names package ownership now and will show installable versions
+        only after matching registry artifacts complete trusted-publisher setup
+        and final acceptance.
       </p>
-    </article>
-    <article class="info-card">
-      <p class="eyebrow">03 · Integrate</p>
-      <h2>Let adapters point inward</h2>
+    </ContentCard>
+    <ContentCard eyebrow="03 · Integrate" title="Let adapters point inward">
       <p>
         Runic Flow remains headless and frontend-neutral. <code
           >RunicFlow.ApplicationBridge</code
         >
         depends on Flow and Toolkit Application Bridge and is released by Flow.
       </p>
-    </article>
-    <article class="info-card">
-      <p class="eyebrow">04 · Verify</p>
-      <h2>Keep the application in control</h2>
+    </ContentCard>
+    <ContentCard eyebrow="04 · Verify" title="Keep the application in control">
       <ul>
         <li>Pin exact product versions during the preview.</li>
         <li>
@@ -94,16 +92,15 @@
           Keep ordinary npm <code>package-lock.json</code> files for applications.
         </li>
       </ul>
-    </article>
-    <article class="info-card full">
-      <div class="notice">
-        <strong>Public launch is gated</strong>
+    </ContentCard>
+    <ContentCard eyebrow="Continue" title="Follow the boundary" full>
+      <Notice title="Public launch is gated">
         <p>
           Source visibility can precede registry publication. Package commands
           will be published only after fresh candidates, downstream consumers,
           trusted publishers, and the documentation review all pass.
         </p>
-      </div>
+      </Notice>
       <p>
         Continue with the <a
           class="text-link"
@@ -114,6 +111,6 @@
         <a class="text-link" href={resolve('/architecture')}>dependency rules</a
         >.
       </p>
-    </article>
+    </ContentCard>
   </section>
-</main>
+</div>
