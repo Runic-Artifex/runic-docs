@@ -5,9 +5,9 @@
 The documentation portal for the independent Runic Artifex projects and the
 explicit integration seams between them.
 
-The portal source and live site are public while the first package preview train
-awaits registry publication. A successful documentation deployment is not
-authorization to publish packages or claim that registry artifacts are live.
+The portal source, live site, and first package preview train are public. The
+package catalog records the exact versions available from NuGet and npm;
+Runic Translations Editor's first application preview remains pending.
 
 The portal is built with SvelteKit and Svelte 5. It is fully prerendered with
 `@sveltejs/adapter-static` and served by the Runic Artifex NixOS VPS at
