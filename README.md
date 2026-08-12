@@ -45,13 +45,13 @@ npm test
 
 ## How the site is published
 
-The documentation portal is a SvelteKit and Svelte 5 site, prerendered with `@sveltejs/adapter-static`. It is served at [docs.runic-artifex.eu](https://docs.runic-artifex.eu); the same source also produces the landing page at [runic-artifex.eu](https://runic-artifex.eu).
+The documentation portal is a SvelteKit and Svelte 5 site, prerendered with `@sveltejs/adapter-static` and served at [docs.runic-artifex.eu](https://docs.runic-artifex.eu). The separate `runic-site` repository owns the project landing page at [runic-artifex.eu](https://runic-artifex.eu).
 
 ## Maintainer release notes
 
 Keep the public catalog aligned with verified registry artifacts and their install commands. Before a product preview is announced, verify the exact source revision, package identity, version, documentation links, and supported NuGet/npm publishing path. Publish through the protected, trusted-publisher workflow; do not treat this portal’s source repository as a package registry.
 
-The site build is emitted to `build/` and prerendered for deployment. The deployment configuration builds the same source for the documentation and apex origins with `RUNIC_SITE_ORIGIN`; no Node.js dependencies are installed at runtime.
+The site build is emitted to `build/` and prerendered for deployment. Production builds use `RUNIC_SITE_ORIGIN=https://docs.runic-artifex.eu`; no Node.js dependencies are installed at runtime. The canonical translation-schema identifiers remain on the apex origin and are routed to the static schema files from this repository.
 
 ## License and support
 

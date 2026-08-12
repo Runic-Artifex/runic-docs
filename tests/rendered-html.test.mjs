@@ -109,6 +109,17 @@ test('renders the documentation home with complete metadata and branding', async
   );
 });
 
+test('links to the dedicated project website while retaining the documentation identity', async () => {
+  const html = await render();
+
+  assert.match(html, /Runic Artifex Documentation/);
+  assert.match(
+    html,
+    /href="https:\/\/runic-artifex\.eu\/"[^>]*>\s*Runic Artifex website/,
+  );
+  assert.match(html, /The map of independent tools and explicit seams\./);
+});
+
 test('keeps navigation usable before hydration and exposes the Sheet trigger contract', async () => {
   const homeHtml = await render();
   const productsHtml = await render('/products');
